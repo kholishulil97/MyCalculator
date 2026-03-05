@@ -51,7 +51,8 @@ fun CalculatorScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         CalculatorKeypad(
-            onNumberClick = vm::onNumberInput
+            onNumberClick = vm::onNumberInput,
+            onOperationClick = vm::onOperationSelected
         )
     }
 }
@@ -97,7 +98,7 @@ fun CalculatorDisplay(
 
             //TextView angka kedua
             Text(
-                text = "456",
+                text = uiState.secondNumber,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Light,
                 color = Color.White,
@@ -124,7 +125,8 @@ fun CalculatorDisplay(
 
 @Composable
 fun CalculatorKeypad(
-    onNumberClick: (String) -> Unit = {}
+    onNumberClick: (String) -> Unit = {},
+    onOperationClick: () -> Unit = {}
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -133,8 +135,8 @@ fun CalculatorKeypad(
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             CalcButton(text = "C", color = Color(0xFFFF453A), modifier = Modifier.weight(1f))
             CalcButton(text = "⌫", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
-            CalcButton(text = "÷", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
-            CalcButton(text = "x", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
+            CalcButton(text = "÷", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onOperationClick)
+            CalcButton(text = "x", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onOperationClick)
         }
 
         // Baris 2: 7, 8, 9, -
@@ -142,7 +144,7 @@ fun CalculatorKeypad(
             listOf("7", "8", "9").forEach { num ->
                 CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
              }
-            CalcButton(text = "-", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
+            CalcButton(text = "-", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onOperationClick)
         }
 
         // Baris 3: 4, 5, 6, +
@@ -150,7 +152,7 @@ fun CalculatorKeypad(
             listOf("4", "5", "6").forEach { num ->
                 CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
             }
-            CalcButton(text = "+", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
+            CalcButton(text = "+", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onOperationClick)
         }
 
         // Baris 4: 1, 2, 3, =

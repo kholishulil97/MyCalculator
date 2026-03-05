@@ -15,8 +15,22 @@ class CalculatorViewModel : ViewModel() {
     // Dipanggil saat user mengetik angka
     fun onNumberInput(digit: String) {
         _uiState.update { state ->
-            val current = if (state.firstNumber == "0") "" else state.firstNumber
-            state.copy(firstNumber = current + digit)
+            if (state.isEditingFirstNumber) {
+                val current = if (state.firstNumber == "0") "" else state.firstNumber
+                state.copy(firstNumber = current + digit)
+            } else {
+                val current = if (state.secondNumber == "0") "" else state.secondNumber
+                state.copy(secondNumber = current + digit)
+            }
+        }
+    }
+
+    // Dipanggil saat user memilih operator (+, -, x, ÷)
+    fun onOperationSelected() {
+        _uiState.update { state ->
+            state.copy(
+                isEditingFirstNumber = false
+            )
         }
     }
 }
