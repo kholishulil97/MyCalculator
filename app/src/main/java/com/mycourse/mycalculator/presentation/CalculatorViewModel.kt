@@ -2,6 +2,7 @@ package com.mycourse.mycalculator.presentation
 
 import androidx.lifecycle.ViewModel
 import com.mycourse.mycalculator.domain.model.CalculatorUiState
+import com.mycourse.mycalculator.domain.operation.Operation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,11 +27,18 @@ class CalculatorViewModel : ViewModel() {
     }
 
     // Dipanggil saat user memilih operator (+, -, x, ÷)
-    fun onOperationSelected() {
+    fun onOperationSelected(operation: Operation) {
         _uiState.update { state ->
-            state.copy(
-                isEditingFirstNumber = false
-            )
+            if (state.firstNumber == "0") {
+                state.copy(
+                    isEditingFirstNumber = true,
+                    selectedOperation = null)
+            } else {
+                state.copy(
+                    isEditingFirstNumber = false,
+                    selectedOperation = operation)
+            }
+
         }
     }
 }

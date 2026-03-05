@@ -29,6 +29,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mycourse.mycalculator.domain.model.CalculatorUiState
+import com.mycourse.mycalculator.domain.operation.Divide
+import com.mycourse.mycalculator.domain.operation.Minus
+import com.mycourse.mycalculator.domain.operation.Multiply
+import com.mycourse.mycalculator.domain.operation.Operation
+import com.mycourse.mycalculator.domain.operation.Plus
 
 @Preview
 @Composable
@@ -51,6 +56,7 @@ fun CalculatorScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         CalculatorKeypad(
+            selectedOperation = uiState.selectedOperation,
             onNumberClick = vm::onNumberInput,
             onOperationClick = vm::onOperationSelected
         )
@@ -86,7 +92,7 @@ fun CalculatorDisplay(
 
             // TextView operator
             Text(
-                text = "+",
+                text = uiState.selectedOperation?.symbol ?: "",
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFFF9F0A),
@@ -125,8 +131,9 @@ fun CalculatorDisplay(
 
 @Composable
 fun CalculatorKeypad(
+    selectedOperation: Operation?,
     onNumberClick: (String) -> Unit = {},
-    onOperationClick: () -> Unit = {}
+    onOperationClick: (Operation) -> Unit = {}
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -135,8 +142,8 @@ fun CalculatorKeypad(
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             CalcButton(text = "C", color = Color(0xFFFF453A), modifier = Modifier.weight(1f))
             CalcButton(text = "⌫", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
-            CalcButton(text = "÷", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onOperationClick)
-            CalcButton(text = "x", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onOperationClick)
+            CalcButton(text = "÷", color = if (selectedOperation == Divide()) Color.White else Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = { onOperationClick(Divide()) })
+            CalcButton(text = "x", color = if (selectedOperation == Multiply()) Color.White else Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = { onOperationClick(Multiply()) })
         }
 
         // Baris 2: 7, 8, 9, -
@@ -144,7 +151,7 @@ fun CalculatorKeypad(
             listOf("7", "8", "9").forEach { num ->
                 CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
              }
-            CalcButton(text = "-", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onOperationClick)
+            CalcButton(text = "-", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = { onOperationClick(Minus()) })
         }
 
         // Baris 3: 4, 5, 6, +
@@ -152,7 +159,7 @@ fun CalculatorKeypad(
             listOf("4", "5", "6").forEach { num ->
                 CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
             }
-            CalcButton(text = "+", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onOperationClick)
+            CalcButton(text = "+", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = {onOperationClick(Plus())})
         }
 
         // Baris 4: 1, 2, 3, =
