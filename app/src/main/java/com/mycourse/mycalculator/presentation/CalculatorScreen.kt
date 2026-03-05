@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,12 +26,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mycourse.mycalculator.domain.model.CalculatorUiState
 
 @Preview
 @Composable
 fun CalculatorScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    vm: CalculatorViewModel = hiltViewModel()
 ) {
+    val uiState by vm.uiState.collectAsStateWithLifecycle()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -39,16 +46,20 @@ fun CalculatorScreen(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CalculatorDisplay()
+        CalculatorDisplay(uiState = uiState)
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        CalculatorKeypad()
+        CalculatorKeypad(
+            onNumberClick = vm::onNumberInput
+        )
     }
 }
 
 @Composable
-fun CalculatorDisplay() {
+fun CalculatorDisplay(
+    uiState: CalculatorUiState
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -63,7 +74,7 @@ fun CalculatorDisplay() {
         ) {
             // TextView angka pertama
             Text(
-                text = "123",
+                text = uiState.firstNumber,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Light,
                 color = Color.White,
@@ -112,7 +123,9 @@ fun CalculatorDisplay() {
 }
 
 @Composable
-fun CalculatorKeypad() {
+fun CalculatorKeypad(
+    onNumberClick: (String) -> Unit = {}
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -127,7 +140,7 @@ fun CalculatorKeypad() {
         // Baris 2: 7, 8, 9, -
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             listOf("7", "8", "9").forEach { num ->
-                CalcButton(text = num, modifier = Modifier.weight(1f))
+                CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
              }
             CalcButton(text = "-", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
         }
@@ -135,7 +148,7 @@ fun CalculatorKeypad() {
         // Baris 3: 4, 5, 6, +
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             listOf("4", "5", "6").forEach { num ->
-                CalcButton(text = num, modifier = Modifier.weight(1f))
+                CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
             }
             CalcButton(text = "+", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
         }
@@ -143,14 +156,14 @@ fun CalculatorKeypad() {
         // Baris 4: 1, 2, 3, =
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             listOf("1", "2", "3").forEach { num ->
-                CalcButton(text = num, modifier = Modifier.weight(1f))
+                CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
             }
             CalcButton(text = "=", color = Color(0xFF30D158), modifier = Modifier.weight(1f))
         }
 
         // Baris 5: 0 (lebar 2x), ., =
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            CalcButton(text = "0", modifier = Modifier.weight(2f))
+            CalcButton(text = "0", modifier = Modifier.weight(2f), onClick = { onNumberClick("0") })
             CalcButton(text = ".", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.weight(1f))
         }
