@@ -61,4 +61,19 @@ class CalculatorViewModel : ViewModel() {
     fun onClear() {
         _uiState.update { CalculatorUiState() }
     }
+
+    // Dipanggil saat user mengetik titik desimal
+    fun onDecimalInput() {
+        _uiState.update { state ->
+            if (state.isEditingFirstNumber) {
+                if (!state.firstNumber.contains("."))
+                    state.copy(firstNumber = state.firstNumber + ".")
+                else state
+            } else {
+                if (!state.secondNumber.contains("."))
+                    state.copy(secondNumber = state.secondNumber + ".")
+                else state
+            }
+        }
+    }
 }

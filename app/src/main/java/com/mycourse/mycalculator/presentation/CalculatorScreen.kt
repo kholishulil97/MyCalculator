@@ -60,7 +60,8 @@ fun CalculatorScreen(
             onNumberClick = vm::onNumberInput,
             onOperationClick = vm::onOperationSelected,
             onBackspaceClick = vm::onBackspace,
-            onClearClick = vm::onClear
+            onClearClick = vm::onClear,
+            onDecimalClick = vm::onDecimalInput
         )
     }
 }
@@ -137,7 +138,8 @@ fun CalculatorKeypad(
     onNumberClick: (String) -> Unit = {},
     onOperationClick: (Operation) -> Unit = {},
     onBackspaceClick: () -> Unit = {},
-    onClearClick: () -> Unit = {}
+    onClearClick: () -> Unit = {},
+    onDecimalClick: () -> Unit = {}
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -177,7 +179,7 @@ fun CalculatorKeypad(
         // Baris 5: 0 (lebar 2x), ., =
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             CalcButton(text = "0", modifier = Modifier.weight(2f), onClick = { onNumberClick("0") })
-            CalcButton(text = ".", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
+            CalcButton(text = ".", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onDecimalClick)
             Spacer(modifier = Modifier.weight(1f))
         }
     }
