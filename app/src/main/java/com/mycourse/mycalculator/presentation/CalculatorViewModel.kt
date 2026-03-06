@@ -41,4 +41,19 @@ class CalculatorViewModel : ViewModel() {
 
         }
     }
+
+    // Dipanggil saat user menghapus satu karakter terakhir
+    fun onBackspace() {
+        _uiState.update { state ->
+            if (state.isEditingFirstNumber) {
+                state.copy(firstNumber = state.firstNumber.dropLast(1).ifEmpty { "0" })
+            } else {
+                val updated = state.secondNumber.dropLast(1).ifEmpty { "0" }
+                state.copy(
+                    secondNumber = updated,
+                    isEditingFirstNumber = updated == "0"
+                )
+            }
+        }
+    }
 }

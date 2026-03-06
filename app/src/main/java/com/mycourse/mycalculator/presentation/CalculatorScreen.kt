@@ -58,7 +58,8 @@ fun CalculatorScreen(
         CalculatorKeypad(
             selectedOperation = uiState.selectedOperation,
             onNumberClick = vm::onNumberInput,
-            onOperationClick = vm::onOperationSelected
+            onOperationClick = vm::onOperationSelected,
+            onBackspaceClick = vm::onBackspace
         )
     }
 }
@@ -133,7 +134,8 @@ fun CalculatorDisplay(
 fun CalculatorKeypad(
     selectedOperation: Operation?,
     onNumberClick: (String) -> Unit = {},
-    onOperationClick: (Operation) -> Unit = {}
+    onOperationClick: (Operation) -> Unit = {},
+    onBackspaceClick: () -> Unit = {}
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -141,7 +143,7 @@ fun CalculatorKeypad(
         // Baris 1: C, ⌫, dan 2 operator pertama (÷, ×)
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             CalcButton(text = "C", color = Color(0xFFFF453A), modifier = Modifier.weight(1f))
-            CalcButton(text = "⌫", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f))
+            CalcButton(text = "⌫", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onBackspaceClick)
             CalcButton(text = "÷", color = if (selectedOperation == Divide()) Color.White else Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = { onOperationClick(Divide()) })
             CalcButton(text = "x", color = if (selectedOperation == Multiply()) Color.White else Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = { onOperationClick(Multiply()) })
         }
