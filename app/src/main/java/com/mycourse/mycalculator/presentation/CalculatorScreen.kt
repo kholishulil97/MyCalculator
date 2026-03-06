@@ -132,7 +132,7 @@ fun CalculatorDisplay(
             )
         } else {
             Text(
-                text = "= ${uiState.result}",
+                text = uiState.result,
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
