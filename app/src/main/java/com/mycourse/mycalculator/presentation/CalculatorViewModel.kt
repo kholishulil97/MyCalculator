@@ -56,4 +56,9 @@ class CalculatorViewModel : ViewModel() {
             }
         }
     }
+
+    // Dipanggil saat user menekan tombol clear
+    fun onClear() {
+        _uiState.update { CalculatorUiState() }
+    }
 }
