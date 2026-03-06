@@ -61,7 +61,8 @@ fun CalculatorScreen(
             onOperationClick = vm::onOperationSelected,
             onBackspaceClick = vm::onBackspace,
             onClearClick = vm::onClear,
-            onDecimalClick = vm::onDecimalInput
+            onDecimalClick = vm::onDecimalInput,
+            onCalculateClick = vm::onCalculate
         )
     }
 }
@@ -122,13 +123,22 @@ fun CalculatorDisplay(
         )
 
         // TextView hasil
-        Text(
-            text = "= 789",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            textAlign = TextAlign.End
-        )
+        if (uiState.errorMessage != null) {
+            Text(
+                text = uiState.errorMessage,
+                fontSize = 20.sp,
+                color = Color(0xFFFF453A),
+                textAlign = TextAlign.End
+            )
+        } else {
+            Text(
+                text = "= ${uiState.result}",
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                textAlign = TextAlign.End
+            )
+        }
     }
 }
 
@@ -139,7 +149,8 @@ fun CalculatorKeypad(
     onOperationClick: (Operation) -> Unit = {},
     onBackspaceClick: () -> Unit = {},
     onClearClick: () -> Unit = {},
-    onDecimalClick: () -> Unit = {}
+    onDecimalClick: () -> Unit = {},
+    onCalculateClick: () -> Unit = {}
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -173,7 +184,7 @@ fun CalculatorKeypad(
             listOf("1", "2", "3").forEach { num ->
                 CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
             }
-            CalcButton(text = "=", color = Color(0xFF30D158), modifier = Modifier.weight(1f))
+            CalcButton(text = "=", color = Color(0xFF30D158), modifier = Modifier.weight(1f), onClick = onCalculateClick)
         }
 
         // Baris 5: 0 (lebar 2x), ., =
