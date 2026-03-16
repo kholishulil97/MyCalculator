@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -89,7 +90,8 @@ fun CalculatorDisplay(
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Light,
                 color = Color.White,
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End,
+                modifier = Modifier.testTag("display_first_number")
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -101,7 +103,7 @@ fun CalculatorDisplay(
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFFF9F0A),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.widthIn(min = 24.dp)
+                modifier = Modifier.widthIn(min = 24.dp).testTag("display_operator")
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -112,7 +114,8 @@ fun CalculatorDisplay(
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Light,
                 color = Color.White,
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End,
+                modifier = Modifier.testTag("display_second_number")
             )
         }
 
@@ -128,7 +131,8 @@ fun CalculatorDisplay(
                 text = uiState.errorMessage,
                 fontSize = 20.sp,
                 color = Color(0xFFFF453A),
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End,
+                modifier = Modifier.testTag("display_error")
             )
         } else {
             Text(
@@ -136,7 +140,8 @@ fun CalculatorDisplay(
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End,
+                modifier = Modifier.testTag("display_result")
             )
         }
     }
@@ -157,40 +162,40 @@ fun CalculatorKeypad(
     ) {
         // Baris 1: C, ⌫, dan 2 operator pertama (÷, ×)
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            CalcButton(text = "C", color = Color(0xFFFF453A), modifier = Modifier.weight(1f), onClick = onClearClick)
-            CalcButton(text = "⌫", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onBackspaceClick)
-            CalcButton(text = "÷", color = if (selectedOperation == Divide()) Color.White else Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = { onOperationClick(Divide()) })
-            CalcButton(text = "x", color = if (selectedOperation == Multiply()) Color.White else Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = { onOperationClick(Multiply()) })
+            CalcButton(text = "C", color = Color(0xFFFF453A), modifier = Modifier.weight(1f).testTag("btn_clear"), onClick = onClearClick)
+            CalcButton(text = "⌫", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f).testTag("btn_backspace"), onClick = onBackspaceClick)
+            CalcButton(text = "÷", color = if (selectedOperation == Divide()) Color.White else Color(0xFFFF9F0A), modifier = Modifier.weight(1f).testTag("btn_divide"), onClick = { onOperationClick(Divide()) })
+            CalcButton(text = "x", color = if (selectedOperation == Multiply()) Color.White else Color(0xFFFF9F0A), modifier = Modifier.weight(1f).testTag("btn_multiply"), onClick = { onOperationClick(Multiply()) })
         }
 
         // Baris 2: 7, 8, 9, -
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             listOf("7", "8", "9").forEach { num ->
-                CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
+                CalcButton(text = num, modifier = Modifier.weight(1f).testTag("btn_$num"), onClick = { onNumberClick(num) })
              }
-            CalcButton(text = "-", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = { onOperationClick(Minus()) })
+            CalcButton(text = "-", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f).testTag("btn_minus"), onClick = { onOperationClick(Minus()) })
         }
 
         // Baris 3: 4, 5, 6, +
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             listOf("4", "5", "6").forEach { num ->
-                CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
+                CalcButton(text = num, modifier = Modifier.weight(1f).testTag("btn_$num"), onClick = { onNumberClick(num) })
             }
-            CalcButton(text = "+", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = {onOperationClick(Plus())})
+            CalcButton(text = "+", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f).testTag("btn_plus"), onClick = {onOperationClick(Plus())})
         }
 
         // Baris 4: 1, 2, 3, =
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             listOf("1", "2", "3").forEach { num ->
-                CalcButton(text = num, modifier = Modifier.weight(1f), onClick = { onNumberClick(num) })
+                CalcButton(text = num, modifier = Modifier.weight(1f).testTag("btn_$num"), onClick = { onNumberClick(num) })
             }
-            CalcButton(text = "=", color = Color(0xFF30D158), modifier = Modifier.weight(1f), onClick = onCalculateClick)
+            CalcButton(text = "=", color = Color(0xFF30D158), modifier = Modifier.weight(1f).testTag("btn_equals"), onClick = onCalculateClick)
         }
 
         // Baris 5: 0 (lebar 2x), ., =
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            CalcButton(text = "0", modifier = Modifier.weight(2f), onClick = { onNumberClick("0") })
-            CalcButton(text = ".", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f), onClick = onDecimalClick)
+            CalcButton(text = "0", modifier = Modifier.weight(2f).testTag("btn_0"), onClick = { onNumberClick("0") })
+            CalcButton(text = ".", color = Color(0xFFFF9F0A), modifier = Modifier.weight(1f).testTag("btn_decimal"), onClick = onDecimalClick)
             Spacer(modifier = Modifier.weight(1f))
         }
     }
